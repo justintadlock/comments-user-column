@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Comments User Column
- * Plugin URI:  http://themehybrid.com/plugins
+ * Plugin URI:  http://themehybrid.com/plugins/comments-user-column
  * Description: Displays the comment author's site display name in a new column on the "Comments" admin screen if they were logged in while commenting.
  * Version:     1.0.0-dev
  * Author:      Justin Tadlock
@@ -17,32 +17,67 @@
  * You should have received a copy of the GNU General Public License along with this program; if not, write
  * to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  *
- * @package   CommentsUserColumns
+ * @package   CommentsUserColumn
  * @version   1.0.0
  * @author    Justin Tadlock <justin@justintadlock.com>
  * @copyright Copyright (c) 2015, Justin Tadlock
- * @link      http://themehybrid.com/plugins
+ * @link      http://themehybrid.com/plugins/comments-user-column
  * @license   http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  */
 
+/**
+ * Plugin class.
+ *
+ * @since  1.0.0
+ * @access public
+ */
 final class Comments_User_Column {
 
+	/**
+	 * Sets up and runs the plugin.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @return void
+	 */
 	private function __construct() {
 
-		add_filter( 'manage_edit-comments_columns', array( $this, 'manage_edit_comments_columns' ) );
+		// Translations.
+		add_action( 'plugins_loaded', array( $this, 'i8n' ) );
 
+		// Custom columns.
+		add_filter( 'manage_edit-comments_columns',  array( $this, 'manage_edit_comments_columns'  )        );
 		add_action( 'manage_comments_custom_column', array( $this, 'manage_comments_custom_column' ), 10, 2 );
 
+		// Custom styles.
 		add_action( 'admin_head-edit-comments.php', array( $this, 'print_styles' ) );
 	}
 
+	/**
+	 * Loads the translation files.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @return void
+	 */
+	public function i18n() {
+		load_plugin_textdomain( 'comments-user-column', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
+	}
+
+	/**
+	 * Adds the custom "User" column to the edit comments screen.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @param  array   $columns
+	 * @return array
+	 */
 	public function manage_edit_comments_columns( $columns ) {
 
-
+		// Add user column.
 		$columns['user'] = esc_html__( 'User', 'comments-user-column' );
 
-
-		// Move response column to the end.
+		// Move core WP response column to the end.
 		if ( isset( $columns['response'] ) ) {
 
 			$response = $columns['response'];
@@ -55,6 +90,15 @@ final class Comments_User_Column {
 		return $columns;
 	}
 
+	/**
+	 * Outputs the user column content, which is the user's display name linked to
+	 * all their comments on the site.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @param  array   $columns
+	 * @return array
+	 */
 	public function manage_comments_custom_column( $column_name, $comment_id ) {
 
 		if ( 'user' === $column_name ) {
@@ -70,6 +114,13 @@ final class Comments_User_Column {
 		}
 	}
 
+	/**
+	 * Outputs some custom CSS to shorten the width of the user column.
+	 *
+	 * @since  1.0.0
+	 * @access public
+	 * @return void
+	 */
 	public function print_styles() { ?>
 
 		<style type="text/css" media="screen">.fixed .column-user { width: 15%; }</style>
