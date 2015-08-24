@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Comments User Column
  * Plugin URI:  http://themehybrid.com/plugins/comments-user-column
- * Description: Displays the comment author's site display name in a new column on the "Comments" admin screen if they were logged in while commenting.
+ * Description: Displays a logged-in comment author's site display name in a new column on the "Comments" admin screen.
  * Version:     1.0.0-dev
  * Author:      Justin Tadlock
  * Author URI:  http://justintadlock.com
@@ -43,7 +43,7 @@ final class Comments_User_Column {
 	private function __construct() {
 
 		// Translations.
-		add_action( 'plugins_loaded', array( $this, 'i8n' ) );
+		add_action( 'plugins_loaded', array( $this, 'i18n' ) );
 
 		// Custom columns.
 		add_filter( 'manage_edit-comments_columns',  array( $this, 'manage_edit_comments_columns'  )        );
