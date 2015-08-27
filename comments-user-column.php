@@ -31,7 +31,7 @@
  * @since  1.0.0
  * @access public
  */
-final class Comments_User_Column {
+final class Comments_User_Column_Plugin {
 
 	/**
 	 * Sets up and runs the plugin.
@@ -145,4 +145,4 @@ final class Comments_User_Column {
 	}
 }
 
-Comments_User_Column::get_instance();
+Comments_User_Column_Plugin::get_instance();
