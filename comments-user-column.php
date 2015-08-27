@@ -139,7 +139,7 @@ final class Comments_User_Column_Plugin {
 		static $instance = null;
 
 		if ( is_null( $instance ) )
-			$instance = new Comments_User_Column;
+			$instance = new Comments_User_Column_Plugin;
 
 		return $instance;
 	}
